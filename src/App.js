@@ -1,26 +1,68 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { getData } from './api/index.js';
+import MUIDataTable from 'mui-datatables';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      length: 0,
+    };
+  }
+
+  transform = data => {
+    return data.map(dataRow => {
+      let tmp = [];
+      Object.keys(dataRow).map(key => {
+        tmp.push(dataRow[key]);
+        return false;
+      });
+      return tmp;
+    });
+  };
+
+  componentDidMount() {
+    getData().then(({ data, length }) => {
+      data = this.transform(data);
+      this.setState({
+        data,
+        length,
+      });
+    });
+  }
+
+  render() {
+    return (
+      <MUIDataTable
+        title={'JOBS LIST'}
+        data={this.state.data}
+        options={{
+          filterType: 'dropdown',
+          responsive: 'scroll',
+        }}
+        columns={[
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          '11',
+          '12',
+          '13',
+          '14',
+          '15',
+          '16',
+        ]}
+      />
+    );
+  }
 }
 
 export default App;
